@@ -1,0 +1,2 @@
+cob-pipeline-view-plugin
+========================
