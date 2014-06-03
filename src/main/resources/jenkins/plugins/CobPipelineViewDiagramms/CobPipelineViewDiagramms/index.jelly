@@ -1,0 +1,204 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:s="/lib/samples">
+	
+	<style type="text/css">
+	
+		div.headline{
+			font-size: 16px;
+			margin-left: 3%;
+			margin-top: 3%;	
+		}
+	
+		table.diagramms{
+			border: 0px solid black;
+			width: 90%;
+			margin-left: 10%;
+			margin-top: 10%;
+		}
+		th.diagramms_center{
+			text-align: center;
+			background-color:grey;
+			font-size: 1em;
+			font-family: Verdana;
+			color: black;
+			width: 30%;
+		}
+		th.diagramms_left{
+			text-align: left;
+			text-size: ;
+			color: black;
+			width: 3%;
+		}
+		td.diagramms_iframe{
+			text-align: center;
+			width: 30%;
+			
+		}
+		
+		
+	</style>
+
+	<script>
+	
+		var data_array = new UrlData(location.search);
+		
+		var headline;
+		
+		var prio_build;
+		var prio_nongraphics_test;
+		var prio_graphics_test;
+		var regular_build;
+		var regular_nongraphics_test;
+		var reguarl_graphics_test;
+		
+		var prio_build_state;
+		var prio_nongraphics_test_state;
+		var prio_graphics_test_state;
+		var regular_build_state;
+		var regular_nongraphics_test_state;
+		var regular_garphics_test_state;
+
+		
+		function onload(){
+			getUrlData();
+			showUrlData();
+		
+		}	
+		
+		
+		/* get information out of url data array */
+		function getUrlData(){
+			for (var property in data_array) {	 	
+				switch(property){
+					case "headline": headline = data_array[property]; break;
+					case "prio_build": prio_build = data_array[property]; break;
+					case "prio_nongraphics_test": prio_nongraphics_test = data_array[property]; break;
+					case "prio_graphics_test": prio_graphics_test = data_array[property]; break;
+					case "regular_build": regular_build = data_array[property]; break;
+					case "regular_nongraphics_test": regular_nongraphics_test = data_array[property]; break;
+					case "regular_graphics_test": regular_graphics_test = data_array[property]; break;
+					case "prio_build_state": prio_build_state = data_array[property]; break;
+					case "prio_nongraphics_test_state": prio_nongraphics_test_state = data_array[property]; break;
+					case "prio_graphics_test_state": prio_graphics_test_state = data_array[property]; break;
+					case "regular_build_state": regular_build_state = data_array[property]; break;
+					case "regular_nongraphics_test_state": regular_nongraphics_test_state = data_array[property]; break;
+					case "regular_graphics_test_state": regular_graphics_test_state = data_array[property]; break;
+					default: 
+				}
+  			} 	
+  					
+		}		
+
+
+		
+		
+		function showUrlData(){		
+			document.getElementById('headline').innerHTML = "View: " + headline;				
+			
+			document.getElementById('prio_build').src = prio_build;		
+			document.getElementById('prio_nongraphics_test').src = prio_nongraphics_test;	
+			document.getElementById('prio_graphics_test').src = prio_graphics_test;	
+			document.getElementById('regular_build').src = regular_build;		
+			document.getElementById('regular_nongraphics_test').src = regular_nongraphics_test;	
+			document.getElementById('regular_graphics_test').src = regular_graphics_test;	
+			
+			
+		/* show state balls */			
+			if(prio_build_state==="" || prio_build_state===" "){document.getElementById('img_prio_build_state').style.display = "none";}
+			else{document.getElementById('img_prio_build_state').src = prio_build_state;}
+
+			if(prio_nongraphics_test_state==="" || prio_nongraphics_test_state===" "){document.getElementById('img_prio_nongraphics_test_state').style.display = "none";}
+			else{document.getElementById('img_prio_nongraphics_test_state').src = prio_nongraphics_test_state;}
+
+			if(prio_graphics_test_state==="" || prio_graphics_test_state===" "){document.getElementById('img_prio_graphics_test_state').style.display = "none";}
+			else{document.getElementById('img_prio_graphics_test_state').src = prio_graphics_test_state;}
+			
+			if(regular_build_state==="" || regular_build_state===" "){document.getElementById('img_regular_build_state').style.display = "none";}
+			else{document.getElementById('img_regular_build_state').src = regular_build_state;}
+			
+			if(regular_nongraphics_test_state==="" || regular_nongraphics_test_state===" "){document.getElementById('img_regular_nongraphics_test_state').style.display = "none";}
+			else{document.getElementById('img_regular_nongraphics_test_state').src = regular_nongraphics_test_state;}
+			
+			if(regular_graphics_test_state==="" || regular_graphics_test_state===" "){document.getElementById('img_regular_graphics_test_state').style.display = "none";}
+			else{document.getElementById('img_regular_graphics_test_state').src = regular_graphics_test_state;}
+
+			/*			
+			document.getElementById('prio_graphics_test').src = itf_servername + '/job/' + user_id + "__prio_graphics_test/test/trend?failureOnly=true";
+			document.getElementById('prio_nongraphics_test').src = itf_servername + '/job/' + user_id + "__prio_nongraphics_test/test/trend?failureOnly=true";
+			
+			document.getElementById('prio_build').src = "http://zdf.de";
+			document.getElementById('prio_graphics_test').src = itf_servername + '/job/' + user_id + "__regular_graphics_test/test/trend?failureOnly=true";
+			document.getElementById('prio_nongraphics_test').src = itf_servername + '/job/' + user_id + "__regular_nongraphics_test/test/trend?failureOnly=true";	
+			*/	
+			/*	
+			http://build2.care-o-bot.org/job/fmw-sb__regular_build/arch=amd64,label=regular_build,repository=cob_common,ros_distro=groovy,ubuntu_distro=precise/warnings16/trendGraph/png
+			http://build2.care-o-bot.org/job/fmw-sb__regular_build/arch=i386,label=regular_build,repository=cob_common,ros_distro=groovy,ubuntu_distro=precise/warnings16/trendGraph/png
+			*/
+		}	
+		
+				
+		function UrlData(querystring) {
+			if (querystring == '') return;
+			var input_data = querystring.slice(1);
+			var data_pairs = input_data.split("&amp;");
+			var data_pair, name, value;
+			var loop = 0;
+							
+			while(loop != data_pairs.length){
+				data_pair = data_pairs[loop].split("=");
+    			name = data_pair[0];
+   			value = data_pair[1];
+    			name = unescape(name).replace("+", " ");
+    			value = unescape(value).replace("+", " ");
+    			this[name] = value;		
+
+				loop++;
+			}			
+			
+		}
+					
+
+		
+			
+	
+	</script>
+	
+	<html>
+		<body onload="onload()">
+		
+			<div class="headline" id="headline"> Test </div>
+		
+			<table id="diagramms" class="diagramms">
+				<tr>
+					<th class="diagramms_left"> Prio </th>
+					<th class="diagramms_center"> Build: <img src="" id="img_prio_build_state"/></th>
+					<th class="diagramms_center"> Test: Non Graphics <img src="" id="img_prio_nongraphics_test_state"/></th>
+					<th class="diagramms_center"> Test: Graphics <img src="" id="img_prio_graphics_test_state"/></th>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="diagramms_iframe"><iframe id="prio_build"></iframe></td>
+					<td class="diagramms_iframe"><iframe id="prio_nongraphics_test"></iframe></td>
+					<td class="diagramms_iframe"><iframe id="prio_graphics_test"></iframe></td>
+				</tr>
+				<tr>	
+					<th class="diagramms_left"> Regular </th>
+					<th class="diagramms_center"> Build: <img src="" id="img_regular_build_state"/></th>
+					<th class="diagramms_center"> Test: Non Graphics <img src="" id="img_regular_nongraphics_test_state"/></th>
+					<th class="diagramms_center"> Test: Graphics <img src="" id="img_regular_graphics_test_state"/></th>
+				</tr>
+				<tr>
+					<td></td>
+					<td class="diagramms_iframe"><iframe id="regular_build"></iframe></td>
+					<td class="diagramms_iframe"><iframe id="regular_nongraphics_test"></iframe></td>
+					<td class="diagramms_iframe"><iframe id="regular_graphics_test"></iframe></td>
+				</tr>
+					
+			</table>	
+		</body>
+	</html>	
+	
+	
+	
+	
+</j:jelly>

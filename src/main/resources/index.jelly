@@ -1,0 +1,5 @@
+<!-- A Jenkins page usually starts with a jelly page named index.jelly. -->
+
+<div>
+  This Plugin creates a new view, which contains customized information about the cob-pipeline-plugin
+</div>

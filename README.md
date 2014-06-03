@@ -1,2 +1,4 @@
-cob-pipeline-view-plugin
-========================
+Blackboard
+==========
+
+Specialized Plugin for IPA320 Fraunhofer Stuttgart
