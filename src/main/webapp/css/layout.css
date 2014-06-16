@@ -1,0 +1,22 @@
+		table.view{
+    		border: 0px;
+    		width: 80%;
+  
+		}
+		
+		
+		th.view_headline{
+			border: 1px solid black;
+			text-align: left;	
+		}
+		th.view_headline_invisible{
+			border: 0px;
+		}
+		
+				
+		td.view_headline{
+			border: 1px solid red;
+		}
+		td.view_entry{
+			border: 1px solid black;
+		}	

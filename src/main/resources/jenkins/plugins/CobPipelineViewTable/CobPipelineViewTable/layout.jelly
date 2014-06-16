@@ -1,0 +1,41 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:s="/lib/samples">
+  	<s:sample title="AJAX with JavaScript Proxy">
+ 
+
+		<table id="CopPipelineTable" border="1" width="500" height="400" align="center">
+			<tr>
+				<th colspan="3"></th>
+				<th colspan="2" align="left">Build</th>
+				<th colspan="4" align="left">Test</th>
+				<th colspan="1" align="left">HW</th>
+				<th colspan="3"></th>
+			</tr>
+			<tr>
+				<td>Summary</td>
+				<td>Weather</td>
+				<td>Full Name</td>
+				<td>Prio</td>
+				<td>Regular</td>
+				<td>Prio_nonGraphics</td>
+				<td>Prio_Graphics</td>
+				<td>Regular_nonGraphics</td>
+				<td>Regular_Graphics</td>
+				<td>...</td>
+				<td>Last Success</td>
+				<td>Last Failure</td>
+				<td>Last Duration</td>
+			</tr>
+		</table>
+
+		<st:bind var="a" value="${it}"/>
+		
+		<div id="msg" />
+		<script>
+			window.setInterval(function (){
+		   	a.increment(1, function(t){document.getElementById('msg').innerHTML = t.responseObject();})
+		      },1000);
+		</script>
+		
+	</s:sample>
+</j:jelly>

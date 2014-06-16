@@ -1,0 +1,368 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:s="jelly:stapler">
+
+	<st:bind var="j_var" value="${it}"/>
+	
+	<style type="text/css">
+		a:link, a:visited {
+			font-family:Arial,Helvetica,sans-serif;
+			font-size: 12px;
+			text-decoration: none;
+			color: black;
+		}
+		
+		a:focus {
+		 	color: grey;
+		}
+		
+		a:hover {
+		  	color: grey;
+		}
+		
+		a:active {
+		  	color: dark grey;
+		}	
+		
+	
+		table.buildable_jobs{
+			border: 0px solid black;
+			width: 40%;
+			margin-left: 10%;
+			margin-top: 2%;
+		}		
+		th.buildable_headline{
+			border: 1px solid black;
+			text-align: center;
+			text-style: normal;	
+			background: white;
+			color: black;
+		}
+		td.buildable_jobs_entry_center{
+			border: 0px;
+			text-align: center;
+			background: white;
+		}		
+		td.buildable_jobs_entry_left{
+			border: 0px;
+			text-align: left;
+			background: white;
+		}	
+		
+	
+		table.database{
+    		border: 0px;
+    		width: 80%;
+    		margin-left: auto;
+    		margin-right: auto;
+    		margin-top: 30px;  
+		}
+		
+		th.database_headline{
+			border: 1px solid black;
+			text-align: center;	
+			text-style: normal;
+			background: black;
+			color: white;
+		}		
+		th.database_headline_invisible{
+			border: 0px;
+		}				
+		td.database_headline{
+			border: 1px solid black;
+			background: white;
+			color: black;
+		}		
+		td.database_entry_center{
+			border: 0px;
+			text-align: center;
+			background: white;
+		}		
+		td.database_entry_left{
+			border: 0px;
+			text-align: left;
+			background: white;
+
+		}			
+		td.database_entry_failure{
+			border: 0px;
+			color: grey;
+		}		
+	</style>
+	
+	
+	<script>	
+		
+		var array_new = new Array();
+		var function_done = false;
+		
+	
+		function onload(){			
+			function_done = "${it.getInitialize()}";	
+			while(!function_done){};
+			
+			show_database();			
+			showBuildableJobs();			
+		}
+		
+	
+		function showBuildableJobs(){
+			var index = 0;
+			
+			var index_size = "${it.getSizeOfDatabaseJobs()}";
+
+			while(index != index_size){
+				addBuildableJob("buildable_jobs", index);
+				index = index + 1;
+			}			
+		}
+		
+		function addBuildableJob(table_id, index){
+		   var table = document.getElementById( table_id );		   
+		   var rows = table.getElementsByTagName( "tr" ).length;
+		   var cols = table.getElementsByTagName( "td" ).length;
+		   var tr = table.insertRow( rows );
+
+			var td_user = document.createElement( "td" );
+			var td_name = document.createElement( "td" );
+			var td_button = document.createElement( "td" );
+
+			td_user.className = "buildable_jobs_entry_left";
+			td_name.className = "buildable_jobs_entry_left";
+			td_button.className = "buildable_jobs_entry_left";
+	
+			var elem_link_button = document.createElement('a');			
+			var elem_img_button = document.createElement('img');
+			
+			
+		/* User */
+			j_var.getBuildableJobUser(index, function(t){ td_user.innerHTML = t.responseObject(); });
+			tr.appendChild( td_user );
+		
+		/* Name */
+			j_var.getBuildableJobName(index, function(t){ td_name.innerHTML = t.responseObject(); });
+			tr.appendChild( td_name );
+		
+		/* Button "Schedule a Build"*/
+			j_var.getBuildableJobButtonImage(function(t){ elem_img_button.src = t.responseObject(); });				
+			j_var.getBuildableJobButtonLink(index, function(t){ elem_link_button.href = t.responseObject(); });				
+			elem_link_button.appendChild( elem_img_button );				
+			td_button.appendChild( elem_link_button );
+			tr.appendChild( td_button );	
+		}	
+
+		
+		function show_database(){
+			var index = 0;						
+			var index_size = "${it.getSizeOfDatabaseRepositorys()}";
+					
+			if(index_size != null){
+				while(index != index_size){
+					add_database_row("database", index);
+					index = index + 1;
+				}	
+			}			
+		}
+
+
+		function add_database_row(table_id, index){
+		   var table = document.getElementById( table_id );		   
+		   var rows = table.getElementsByTagName( "tr" ).length;
+		   var cols = table.getElementsByTagName( "td" ).length;
+		   var tr = table.insertRow( rows );
+
+			var td_summary = document.createElement( "td" );
+			var td_weather = document.createElement( "td" );
+			var td_username = document.createElement( "td" );
+			var td_full_name = document.createElement( "td" );
+			var td_prio_build = document.createElement( "td" );
+			var td_regular_build = document.createElement( "td" );
+			var td_prio_nongraphics = document.createElement( "td" );
+			var td_prio_graphics = document.createElement( "td" );
+			var td_regular_nongraphics = document.createElement( "td" );
+			var td_regular_graphics = document.createElement( "td" );
+			var td_hw = document.createElement( "td" );
+			var td_last_success = document.createElement( "td" );
+			var td_last_failure = document.createElement( "td" );
+			var td_last_duration = document.createElement( "td" );
+			
+			var td_output1 = document.createElement( "td" );
+			var td_output2 = document.createElement( "td" );
+			
+			td_summary.className = "database_entry_center";
+			td_weather.className = "database_entry_center";
+			td_username.className = "database_entry_left";
+			td_full_name.className = "database_entry_left";
+			td_prio_build.className = "database_entry_center";
+			td_regular_build.className = "database_entry_center";
+			td_prio_nongraphics.className = "database_entry_center";
+			td_prio_graphics.className = "database_entry_center";
+			td_regular_nongraphics.className = "database_entry_center";
+			td_regular_graphics.className = "database_entry_center";
+			td_last_success.className = "database_entry_center";
+			td_last_failure.className = "database_entry_center";
+			td_last_duration.className = "database_entry_center";
+						
+			td_output1.className = "database_entry_failure";
+			td_output2.className = "database_entry_failure";
+
+		/* links */				
+			var elem_link = document.createElement('a');
+			var elem_link_prio_build = document.createElement('a');
+			var elem_link_regular_build = document.createElement('a');
+			var elem_link_prio_nongraphics = document.createElement('a');
+			var elem_link_prio_graphics = document.createElement('a');
+			var elem_link_regular_nongraphics = document.createElement('a');
+			var elem_link_regular_graphics = document.createElement('a');
+			
+		/* images */
+			var elem_img_summary = document.createElement('img');
+			var elem_img_prio_build = document.createElement('img');
+			var elem_img_regular_build = document.createElement('img');
+			var elem_img_prio_nongraphics = document.createElement('img');
+			var elem_img_prio_graphics = document.createElement('img');
+			var elem_img_regular_nongraphics = document.createElement('img');
+			var elem_img_regular_graphics = document.createElement('img');
+
+									
+		/* t.responseObject(); */
+	
+		/* Comment1 
+			j_var.getFakeComment1(index, function(t){ td_output1.innerHTML = t.responseObject(); });
+			tr.appendChild( td_output1 );
+			*/
+			
+		/* Comment2
+			j_var.getFakeComment2(index, function(t){ td_output2.innerHTML = t.responseObject(); });
+			tr.appendChild( td_output2 );		
+			*/
+				
+		/* Summary */
+			j_var.getSummary(index, function(t){ elem_img_summary.src = t.responseObject(); });					
+			td_summary.appendChild(elem_img_summary);
+			tr.appendChild( td_summary);		
+		
+		/* Weather
+			j_var.getWeather(index, function(t){ td_weather.innerHTML = t.responseObject(); });
+			tr.appendChild( td_weather);*/
+		
+		/* User */
+			j_var.getUserName(index, function(t){ td_username.innerHTML = t.responseObject(); });
+			tr.appendChild( td_username );		
+		
+		/* Repository */
+ 			j_var.getRepositoryLink(index, function(t){ elem_link.href = t.responseObject(); });	
+			j_var.getRepository(index, function(t){ td_full_name.innerHTML = t.responseObject(); });			
+			elem_link.appendChild( td_full_name );			
+			tr.appendChild( elem_link );
+						
+		/* Build Prio 0 */ 			
+			j_var.getRepositoryStatusIconOutOfDatabase(index, 0, function(t){ elem_img_prio_build.src = t.responseObject(); });			
+			j_var.getMatrixProjectLink(index, 'prio_build', function(t){ elem_link_prio_build.href = t.responseObject(); });	
+			elem_link_prio_build.appendChild( elem_img_prio_build );			
+			td_prio_build.appendChild(elem_link_prio_build);
+			tr.appendChild( td_prio_build );
+			
+		/* Build Regular 1 */ 		
+			j_var.getRepositoryStatusIconOutOfDatabase(index, 1, function(t){ elem_img_regular_build.src = t.responseObject(); });			
+			j_var.getMatrixProjectLink(index, 'regular_build', function(t){ elem_link_regular_build.href = t.responseObject(); });	
+			elem_link_regular_build.appendChild( elem_img_regular_build );  
+			td_regular_build.appendChild(elem_link_regular_build);
+			tr.appendChild( td_regular_build );	
+			
+		/* Test Prio Non Graphics 2 */ 		
+			j_var.getRepositoryStatusIconOutOfDatabase(index, 2, function(t){ elem_img_prio_nongraphics.src = t.responseObject(); });			
+			j_var.getMatrixProjectLink(index, 'prio_nongraphics_test', function(t){ elem_link_prio_nongraphics.href = t.responseObject(); });	
+			elem_link_prio_nongraphics.appendChild( elem_img_prio_nongraphics );  
+			td_prio_nongraphics.appendChild(elem_link_prio_nongraphics);
+			tr.appendChild( td_prio_nongraphics );
+			
+		/* Test Prio Graphics 3 */ 		
+			j_var.getRepositoryStatusIconOutOfDatabase(index, 3, function(t){ elem_img_prio_graphics.src = t.responseObject(); });			
+			j_var.getMatrixProjectLink(index, 'prio_graphics_test', function(t){ elem_link_prio_graphics.href = t.responseObject(); });	
+			elem_link_prio_graphics.appendChild( elem_img_prio_graphics );  
+			td_prio_graphics.appendChild(elem_link_prio_graphics);
+			tr.appendChild( td_prio_graphics );
+			
+		/* Test Regular Non Graphics 4 */ 		
+			j_var.getRepositoryStatusIconOutOfDatabase(index, 4, function(t){ elem_img_regular_nongraphics.src = t.responseObject(); });			
+			j_var.getMatrixProjectLink(index, 'regular_nongraphics_test', function(t){ elem_link_regular_nongraphics.href = t.responseObject(); });	
+			elem_link_regular_nongraphics.appendChild( elem_img_regular_nongraphics );  
+			td_regular_nongraphics.appendChild(elem_link_regular_nongraphics);
+			tr.appendChild( td_regular_nongraphics );
+			
+		/* Test Regular Graphics 5 */ 		
+			j_var.getRepositoryStatusIconOutOfDatabase(index, 5, function(t){ elem_img_regular_graphics.src = t.responseObject(); });			
+			j_var.getMatrixProjectLink(index, 'regular_graphics_test', function(t){ elem_link_regular_graphics.href = t.responseObject(); });	
+			elem_link_regular_graphics.appendChild( elem_img_regular_graphics );  
+			td_regular_graphics.appendChild(elem_link_regular_graphics);
+			tr.appendChild( td_regular_graphics );
+			
+		/* HW still empty 
+			tr.appendChild( td_hw );
+		*/	
+					
+		/* Last Success 6 */
+			j_var.getLastSuccess(index, 6, function(t){ td_last_success.innerHTML = t.responseObject(); });
+			tr.appendChild( td_last_success );
+			
+		/* Last Failure 7 */
+			j_var.getLastFailure(index, 7, function(t){ td_last_failure.innerHTML = t.responseObject(); });
+			tr.appendChild( td_last_failure );
+			
+		/* Last Failure 8 */
+			j_var.getLastDuration(index, 8, function(t){ td_last_duration.innerHTML = t.responseObject(); });
+			tr.appendChild( td_last_duration );				
+		/*
+		<td class="database_headline">...</td>
+		<th class="database_headline" colspan="1">HW</th>
+		*/
+		
+		}	 
+		      
+	</script>
+	
+	<html>
+	<body onload="onload();">	
+ 		<table class="database" id="database">
+			<tr>
+				<th class="database_headline_invisible" colspan="3"></th>
+				<th class="database_headline" colspan="2">Build</th>
+				<th class="database_headline" colspan="4">Test</th>				
+				<th class="database_headline_invisible" colspan="3"></th>
+			</tr>
+			<tr>							
+				<td class="database_headline">Summary</td>
+				<td class="database_headline">User</td>
+				<td class="database_headline">Repository</td>
+				<td class="database_headline">Prio</td>
+				<td class="database_headline">Regular</td>
+				<td class="database_headline">Prio nonGraphics</td>
+				<td class="database_headline">Prio Graphics</td>
+				<td class="database_headline">Regular nonGraphics</td>
+				<td class="database_headline">Regular Graphics</td>				
+				<td class="database_headline">Last Success</td>
+				<td class="database_headline">Last Failure</td>
+				<td class="database_headline">Last Duration</td>
+			</tr>
+		</table>
+
+		<table class="buildable_jobs" id="buildable_jobs">
+			<tr>
+				<th class="buildable_headline">User</th>
+				<th class="buildable_headline">Job</th>
+				<th class="buildable_headline">Build</th>
+			</tr>
+		</table>
+		
+	</body>
+	</html>
+	
+
+			
+
+		
+		
+		
+
+</j:jelly>
+
